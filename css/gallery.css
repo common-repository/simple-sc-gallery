@@ -1,0 +1,251 @@
+body {
+    margin: 0;
+}
+
+canvas {
+    background-image: radial-gradient(#666, #333);
+}
+
+#instructions {
+    position: absolute;
+    color: #fff;
+    bottom: 0;
+    padding-bottom: 6px;
+    font-family: sans-serif;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+}
+
+.simple-sc-gallery {
+    display: grid;
+    gap: 10px; /* Adjust as needed */
+}
+
+.simple-sc-gallery-thumbnail {
+    box-sizing: border-box; /* Ensures borders are included in the element's total width and height */
+    overflow: hidden; /* Hides overflow if the thumbnail size exceeds container size */
+}
+
+/* Updated styles for responsive thumbnails */
+.simple-sc-gallery-thumbnail.uniform {
+    width: 100%;
+    height: auto; /* Allows automatic height adjustment based on aspect ratio */
+}
+
+.simple-sc-gallery-thumbnail.fixed {
+    width: var(--thumb-width, 150px);
+    height: var(--thumb-height, 150px);
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.simple-sc-gallery-thumbnail img.thumbnail {
+    display: block; /* Ensures images are displayed as block elements */
+    box-sizing: border-box; /* Ensures borders are included in the image's total width and height */
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image covers the entire thumbnail container */
+    cursor: pointer;
+    transition: var(--transition-effect, all 0.3s ease);
+}
+
+/* Dynamic thumbnail effects */
+.effect-scale:hover img.thumbnail {
+    transform: scale(var(--scale-factor, 1.1));
+}
+
+.effect-blur:hover img.thumbnail {
+    filter: blur(var(--blur-amount, 5px));
+}
+
+.effect-grayscale:hover img.thumbnail {
+    filter: grayscale(var(--grayscale-amount, 100%));
+}
+
+.effect-hue-rotate:hover img.thumbnail {
+    filter: hue-rotate(var(--hue-rotate-amount, 90deg));
+}
+
+/* Add distortion effect */
+.effect-distortion:hover img.thumbnail {
+    filter: url(#distortion); /* Use an SVG filter or CSS filter for the distortion effect */
+}
+
+/* Style for fullscreen image */
+.simple-sc-gallery-thumbnail img.fullscreen {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100%; 
+    height: 100%;
+    max-width: 90%;
+    max-height: 90%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    transition: all 0.5s ease;
+    object-fit: contain;
+}
+
+/* Style for backdrop */
+.simple-sc-gallery .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9998;
+    display: none;
+}
+
+/* Style for close button */
+.simple-sc-gallery .close {
+    position: fixed;
+    top: 10px; /* Adjust if needed */
+    right: 10px; /* Adjust if needed */
+    width: 33px;
+    height: 33px;
+    cursor: pointer;
+    z-index: 10001;
+    background-color: var(--close-color, #2196F3);
+    opacity: .8;
+}
+
+.simple-sc-gallery .close:before,
+.simple-sc-gallery .close:after {
+    position: absolute;
+    top: 0;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #fff;
+}
+
+.simple-sc-gallery .close:before {
+    transform: rotate(45deg);
+}
+
+.simple-sc-gallery .close:after {
+    transform: rotate(-45deg);
+}
+
+/* Styles for arrows */
+.simple-sc-gallery .arrow {
+    position: fixed;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 9999;
+    transform: translateY(-50%);
+    color: var(--arrow-color, #000);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 33px;
+    border: 2px solid var(--arrow-color, #000);
+    font-size: 33px;
+}
+
+.simple-sc-gallery .arrow.left {
+    left: 10px;
+}
+
+.simple-sc-gallery .arrow.right {
+    right: 10px;
+}
+
+.simple-sc-gallery .arrow.left::before {
+    content: '‹';
+}
+
+.simple-sc-gallery .arrow.right::before {
+    content: '›';
+}
+
+/* Style for arrows without circle */
+.simple-sc-gallery.arrow-style-arrow .arrow {
+    background-color: transparent;
+    border-radius: 0;
+    border: none;
+}
+
+.simple-sc-gallery.arrow-style-arrow .arrow.left::before,
+.simple-sc-gallery.arrow-style-arrow .arrow.right::before {
+    background-color: var(--arrow-color, #000);
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid var(--arrow-color, #000);
+    border-right: 2px solid var(--arrow-color, #000);
+}
+
+.simple-sc-gallery.arrow-style-arrow .arrow.left::before {
+    transform: rotate(-135deg);
+}
+
+.simple-sc-gallery.arrow-style-arrow .arrow.right::before {
+    transform: rotate(45deg);
+}
+
+.simple-sc-gallery-pagination {
+    margin-top: 20px;
+}
+
+.simple-sc-gallery-pagination .pagination-link,
+.simple-sc-gallery-pagination .current-page {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333!important;
+    text-decoration: none;
+}
+
+.simple-sc-gallery-pagination .current-page {
+    font-weight: bold;
+    background-color: #ddd;
+    color: #000;
+}
+
+/* Adding media queries for adaptability */
+@media (max-width: 1200px) {
+    .simple-sc-gallery-thumbnail.fixed {
+        width: calc(var(--thumb-width, 150px) * 0.75); 
+        height: calc(var(--thumb-height, 150px) * 0.75);
+    }
+}
+
+@media (max-width: 992px) {
+    .simple-sc-gallery-thumbnail.fixed {
+        width: calc(var(--thumb-width, 150px) * 0.55);
+        height: calc(var(--thumb-height, 150px) * 0.55);
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
+
+@media (max-width: 768px) {
+    .simple-sc-gallery {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .simple-sc-gallery-thumbnail.fixed {
+        width: calc(var(--thumb-width, 160px) * 0.6); 
+        height: calc(var(--thumb-height, 160px) * 0.6);
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
+
+@media (max-width: 576px) {
+    .simple-sc-gallery-thumbnail.fixed {
+        width: calc(var(--thumb-width, 150px) * 0.57);
+        height: calc(var(--thumb-height, 150px) * 0.57);
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
